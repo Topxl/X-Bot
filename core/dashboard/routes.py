@@ -216,9 +216,18 @@ def setup_routes(app: FastAPI, bot_managers: dict, start_time: datetime, config:
     async def trigger_stats_collection():
         """Déclencher manuellement la collecte de stats"""
         try:
-            scheduler = bot_managers.get("scheduler")
-            if not scheduler:
-                return {"success": False, "error": "Scheduler not available"}
+            # Lazy loading du scheduler depuis DI container
+            from core.container import get_container
+            container = get_container()
+            
+            # Vérifier si le bot principal est en cours d'exécution
+            if not container.is_initialized('scheduler'):
+                return {
+                    "success": False, 
+                    "error": "Scheduler not initialized - Bot principal must be running"
+                }
+            
+            scheduler = container.get('scheduler')
             
             # Déclencher le job de collecte de stats
             success = scheduler.run_job_now("collect_stats")
@@ -240,8 +249,9 @@ def setup_routes(app: FastAPI, bot_managers: dict, start_time: datetime, config:
             tweet_type = data.get("type", "powerful_statement")
             
             # Obtenir le générateur de contenu
-            from core.generator import get_content_generator
-            generator = get_content_generator()
+            from core.container import get_container
+            container = get_container()
+            generator = container.get('content')
             
             # Générer un tweet de test
             content = generator.generate_tweet_content(tweet_type=tweet_type)
@@ -273,8 +283,9 @@ def setup_routes(app: FastAPI, bot_managers: dict, start_time: datetime, config:
     async def get_tweet_types_info():
         """Récupère les informations sur les types de tweets configurés"""
         try:
-            from core.generator import get_content_generator
-            generator = get_content_generator()
+            from core.container import get_container
+            container = get_container()
+            generator = container.get('content')
             
             # Obtenir la configuration actuelle
             config_manager = bot_managers.get("config_manager")
@@ -330,8 +341,9 @@ def setup_routes(app: FastAPI, bot_managers: dict, start_time: datetime, config:
     async def get_viral_tweets(limit: int = 10):
         """Récupère les tweets viraux pour inspiration"""
         try:
-            from core.generator import get_content_generator
-            generator = get_content_generator()
+            from core.container import get_container
+            container = get_container()
+            generator = container.get('content')
             
             # Obtenir les tweets viraux
             viral_tweets = generator.get_viral_inspiration(limit=limit)

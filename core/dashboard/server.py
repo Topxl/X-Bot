@@ -61,7 +61,7 @@ class DashboardServer:
         self._setup_routes()
     
     def _init_bot_managers(self) -> dict:
-        """Initialise les managers du bot avec gestion d'erreur"""
+        """Initialise les managers du bot avec gestion d'erreur - DASHBOARD MODE"""
         managers = {
             "config_manager": None,
             "twitter_manager": None, 
@@ -70,17 +70,17 @@ class DashboardServer:
         }
         
         try:
-            # Utiliser le DI Container (nouvelle architecture)
+            # Dashboard utilise UNIQUEMENT config et storage (lecture seule)
             from container import get_container
             container = get_container()
             
-            # Récupération des services via DI Container
+            # Services minimaux pour dashboard (pas d'initialisation complète)
             managers["config_manager"] = container.get('config')
-            managers["twitter_manager"] = container.get('twitter')
             managers["storage_manager"] = container.get('storage')
-            managers["scheduler"] = container.get('scheduler')
             
-            logger.info("Bot managers initialized successfully")
+            # Twitter et Scheduler : NE PAS INITIALISER dans dashboard
+            # Ces services restent None pour éviter les doubles initialisations
+            logger.info("🖥️ Dashboard managers initialized (read-only mode)")
             
         except ImportError as e:
             logger.warning(f"Some bot managers not available: {e}")

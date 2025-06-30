@@ -46,7 +46,7 @@
     "model": "gpt-4o-mini",
     "enable_images": true,
     "image_model": "dall-e-3",
-    "max_tokens": 150,
+    "max_tokens": 100,
     "temperature": 0.7,
     "viral_keywords": [
       "crypto",
@@ -70,7 +70,7 @@
         "powerful_statement": {
           "name": "Déclaration Percutante",
           "description": "Une courte déclaration qui provoque une réaction",
-          "max_tokens": 100,
+          "max_tokens": 60,
           "temperature": 0.8,
           "weight": 1,
           "enabled": true
@@ -78,7 +78,7 @@
         "educational_post": {
           "name": "Post Éducatif",
           "description": "Un message détaillé et instructif",
-          "max_tokens": 280,
+          "max_tokens": 120,
           "temperature": 0.7,
           "weight": 1,
           "enabled": true
@@ -86,7 +86,7 @@
         "personal_story": {
           "name": "Histoire Personnelle",
           "description": "Une histoire personnelle et relatante",
-          "max_tokens": 250,
+          "max_tokens": 100,
           "temperature": 0.9,
           "weight": 1,
           "enabled": true
@@ -105,7 +105,7 @@
     "tweet_generation": {
       "provider": "auto",
       "model": "gpt-4o-mini",
-      "max_tokens": 150,
+      "max_tokens": 80,
       "temperature": 0.7
     }
   },

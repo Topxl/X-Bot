@@ -200,33 +200,74 @@ class StorageManager:
             logger.error(f"Failed to setup tables: {e}")
     
     def _setup_storage(self) -> None:
-        """Setup storage buckets for images"""
+        """Setup storage buckets for images with enhanced RLS handling"""
         try:
-            # Create images bucket if it doesn't exist
-            buckets = self.supabase.storage.list_buckets()
-            bucket_names = [bucket.name if hasattr(bucket, 'name') else bucket['name'] for bucket in buckets]
+            # Test if bucket exists by trying to list objects in it
+            bucket_exists = self._check_bucket_exists('generated-images')
             
-            if 'generated-images' not in bucket_names:
-                try:
-                    # Try to create bucket with public access
-                    self.supabase.storage.create_bucket(
-                        'generated-images',
-                        options={'public': True}
-                    )
-                    logger.info("Created 'generated-images' bucket")
-                except Exception as bucket_error:
-                    # Not critical - bucket might exist or RLS prevents creation
-                    if 'already exists' in str(bucket_error).lower():
-                        logger.debug("Bucket already exists")
-                    elif 'violates row-level security' in str(bucket_error).lower():
-                        logger.info("Bucket creation blocked by RLS policy (non-critical)")
-                    else:
-                        logger.warning(f"Bucket creation failed (non-critical): {bucket_error}")
-            else:
-                logger.debug("Storage bucket 'generated-images' already exists")
+            if bucket_exists:
+                logger.info("✅ Storage bucket 'generated-images' is available")
+                return
+            
+            # Bucket doesn't exist, try to create it
+            logger.info("📦 Attempting to create 'generated-images' bucket...")
+            
+            try:
+                self.supabase.storage.create_bucket(
+                    'generated-images',
+                    options={'public': True}
+                )
+                logger.info("✅ Storage bucket 'generated-images' created successfully")
+                
+            except Exception as bucket_error:
+                error_msg = str(bucket_error).lower()
+                
+                if 'already exists' in error_msg:
+                    logger.info("✅ Storage bucket 'generated-images' already exists")
+                    
+                elif any(rls_keyword in error_msg for rls_keyword in ['row-level security', 'rls', 'policy']):
+                    logger.warning("⚠️ RLS Policy blocks bucket creation - Manual setup required")
+                    logger.warning("📋 To fix: Run this SQL in your Supabase dashboard:")
+                    logger.warning("   INSERT INTO storage.buckets (id, name, public, file_size_limit, allowed_mime_types)")
+                    logger.warning("   VALUES ('generated-images', 'generated-images', true, 52428800, ARRAY['image/jpeg', 'image/png', 'image/webp'])")
+                    logger.warning("   ON CONFLICT (id) DO NOTHING;")
+                    
+                elif 'permission' in error_msg or 'unauthorized' in error_msg:
+                    logger.warning("⚠️ Insufficient permissions to create bucket")
+                    logger.warning("📋 Solution: Create bucket manually in Supabase dashboard or run init_supabase.sql")
+                    
+                else:
+                    logger.warning(f"⚠️ Bucket creation failed: {bucket_error}")
+                    logger.warning("📋 Images will be stored locally instead")
                 
         except Exception as e:
-            logger.warning(f"Storage setup failed (non-critical): {e}")
+            logger.warning(f"⚠️ Storage setup failed: {e}")
+            logger.warning("📋 Bot will continue without image storage functionality")
+    
+    def _check_bucket_exists(self, bucket_name: str) -> bool:
+        """
+        Check if a storage bucket exists by attempting to access it
+        
+        Args:
+            bucket_name: Name of the bucket to check
+            
+        Returns:
+            bool: True if bucket exists and is accessible, False otherwise
+        """
+        try:
+            # Try to list objects in the bucket (more reliable than list_buckets)
+            self.supabase.storage.from_(bucket_name).list()
+            return True
+        except Exception as e:
+            error_msg = str(e).lower()
+            
+            # These errors indicate the bucket exists but might be empty
+            if any(indicator in error_msg for indicator in ['not found', 'does not exist', 'bucket_not_found']):
+                return False
+            
+            # Other errors might indicate the bucket exists but we have permission issues
+            logger.debug(f"Bucket check for '{bucket_name}' returned: {e}")
+            return True  # Assume it exists if we get permission errors
     
     @retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=4, max=10))
     @safe_execute(
@@ -514,7 +555,7 @@ class StorageManager:
                     )
                     tweets.append(tweet)
                     
-                logger.info(f"Retrieved {len(tweets)} recent tweets")
+                logger.debug(f"Retrieved {len(tweets)} recent tweets")
             
             return tweets
             

@@ -96,10 +96,15 @@ class ContentGenerator:
     def _initialize_with_recovery(self) -> None:
         """Initialize content generator components with comprehensive error recovery"""
         try:
-            # Initialize LLM Provider Manager
-            from core.llm_providers import LLMProviderManager
-            self.llm_manager = LLMProviderManager()
-            self.llm_manager.initialize_providers()
+            # Utiliser LLM Manager depuis DI Container (pas de création directe)
+            try:
+                from container import get_container
+                container = get_container()
+                self.llm_manager = container.get('llm_manager')
+            except (ImportError, KeyError):
+                logger.warning("⚠️ DI Container LLM manager not available, using direct access")
+                from core.llm_providers import get_llm_manager
+                self.llm_manager = get_llm_manager()
             
             # Initialize OpenAI (for images only)
             self._init_openai()
@@ -519,29 +524,43 @@ class ContentGenerator:
             
             logger.info(f"Generating {tweet_type} tweet (max_tokens: {max_tokens}, temp: {temperature})")
             
-            # Utiliser LLM Provider Manager pour générer
-            generated_content = self.llm_manager.generate_reply(
-                system_prompt=system_prompt['content'],
-                user_prompt=user_prompt,
-                model=config.content_generation.model,
-                max_tokens=max_tokens,
-                temperature=temperature
-            )
+            # Retry logic avec tokens réduits si contenu trop long
+            retry_attempts = 3
+            current_max_tokens = max_tokens
             
-            if generated_content:
-                # Enlever les guillemets au début et à la fin
-                generated_content = generated_content.strip('"').strip("'").strip()
+            for attempt in range(retry_attempts):
+                # Utiliser LLM Provider Manager pour générer
+                generated_content = self.llm_manager.generate_reply(
+                    system_prompt=system_prompt['content'],
+                    user_prompt=user_prompt,
+                    model=config.content_generation.model,
+                    max_tokens=current_max_tokens,
+                    temperature=temperature
+                )
                 
-                # Validation du contenu
-                if self._validate_tweet_content(generated_content, tweet_type):
-                    logger.info(f"{type_config.get('name', tweet_type)} generated successfully")
-                    return generated_content
+                if generated_content:
+                    # Enlever les guillemets au début et à la fin
+                    generated_content = generated_content.strip('"').strip("'").strip()
+                    
+                    # Validation du contenu
+                    if self._validate_tweet_content(generated_content, tweet_type):
+                        logger.info(f"{type_config.get('name', tweet_type)} generated successfully (attempt {attempt + 1})")
+                        return generated_content
+                    else:
+                        # Si trop long, réduire tokens pour prochain essai
+                        if len(generated_content) > 280:
+                            current_max_tokens = max(30, int(current_max_tokens * 0.7))  # Réduire de 30%
+                            logger.warning(f"Content too long ({len(generated_content)} chars), retrying with {current_max_tokens} tokens (attempt {attempt + 1}/{retry_attempts})")
+                        else:
+                            logger.warning(f"Content failed validation (attempt {attempt + 1})")
+                            break  # Autre problème que la longueur
                 else:
-                    logger.warning("Generated content failed validation - using fallback")
-                    return self.generate_fallback_crypto_content()
-            else:
-                logger.warning("LLM generation returned empty content - using fallback")
-                return self.generate_fallback_crypto_content()
+                    logger.warning(f"LLM generation returned empty content (attempt {attempt + 1})")
+                    current_max_tokens = max(30, int(current_max_tokens * 0.8))  # Réduire un peu moins
+            
+            # Si tous les essais ont échoué, utiliser fallback
+            logger.warning("All generation attempts failed - using fallback")
+            return self.generate_fallback_crypto_content()
             
         except Exception as e:
             logger.error(f"Failed to generate tweet content: {e}")

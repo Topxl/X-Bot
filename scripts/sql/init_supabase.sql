@@ -65,14 +65,7 @@ CREATE TABLE IF NOT EXISTS quota_tracking (
     UNIQUE(date)
 );
 
--- Create performance_metrics table
-CREATE TABLE IF NOT EXISTS performance_metrics (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    metric_name VARCHAR NOT NULL,
-    metric_value DECIMAL,
-    metric_data JSONB,
-    recorded_at TIMESTAMPTZ DEFAULT NOW()
-);
+-- Note: performance_metrics table removed - metrics calculated dynamically from stats table
 
 -- =====================================================
 -- Indexes for Performance
@@ -99,8 +92,7 @@ CREATE INDEX IF NOT EXISTS idx_configs_key ON configs(key);
 -- Quota tracking indexes
 CREATE INDEX IF NOT EXISTS idx_quota_tracking_date ON quota_tracking(date DESC);
 
--- Performance metrics indexes
-CREATE INDEX IF NOT EXISTS idx_performance_metrics_name_time ON performance_metrics(metric_name, recorded_at DESC);
+-- Performance metrics indexes removed - table not used
 
 -- =====================================================
 -- Triggers for Updated At
@@ -135,7 +127,7 @@ ALTER TABLE replies ENABLE ROW LEVEL SECURITY;
 ALTER TABLE stats ENABLE ROW LEVEL SECURITY;
 ALTER TABLE configs ENABLE ROW LEVEL SECURITY;
 ALTER TABLE quota_tracking ENABLE ROW LEVEL SECURITY;
-ALTER TABLE performance_metrics ENABLE ROW LEVEL SECURITY;
+-- performance_metrics table removed
 
 -- Create policies (adjust based on your auth requirements)
 -- These policies allow all operations for authenticated users
@@ -156,8 +148,7 @@ CREATE POLICY "Allow all operations for authenticated users" ON configs
 CREATE POLICY "Allow all operations for authenticated users" ON quota_tracking
     FOR ALL USING (auth.role() = 'authenticated');
 
-CREATE POLICY "Allow all operations for authenticated users" ON performance_metrics
-    FOR ALL USING (auth.role() = 'authenticated');
+-- performance_metrics policies removed - table not used
 
 -- =====================================================
 -- Storage Setup
@@ -182,8 +173,7 @@ CREATE POLICY "Allow authenticated upload" ON storage.objects
 -- Enable realtime for replies table (for auto-liking)
 ALTER PUBLICATION supabase_realtime ADD TABLE replies;
 
--- Enable realtime for performance monitoring
-ALTER PUBLICATION supabase_realtime ADD TABLE performance_metrics;
+-- Performance monitoring via realtime removed - metrics calculated dynamically
 
 -- =====================================================
 -- Initial Data
@@ -304,9 +294,9 @@ $$ LANGUAGE plpgsql;
 DO $$
 BEGIN
     RAISE NOTICE 'Twitter Bot Automated database setup completed successfully!';
-    RAISE NOTICE 'Tables created: tweets, replies, stats, configs, quota_tracking, performance_metrics';
+    RAISE NOTICE 'Tables created: tweets, replies, stats, configs, quota_tracking';
     RAISE NOTICE 'Storage bucket created: generated-images';
-    RAISE NOTICE 'Realtime enabled for: replies, performance_metrics';
+    RAISE NOTICE 'Realtime enabled for: replies';
     RAISE NOTICE 'Views created: daily_stats, top_tweets, engagement_overview';
     RAISE NOTICE 'Functions created: update_quota_usage, get_quota_status';
 END $$; 
