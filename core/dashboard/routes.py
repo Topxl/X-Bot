@@ -538,7 +538,6 @@ def get_recent_log_entries(limit: int = 20) -> List[Dict[str, Any]]:
             Path("../../logs"),     # Depuis core/dashboard vers logs
             Path("../logs"),        # Depuis core vers logs
             Path("logs"),           # Depuis racine
-            Path("../core/logs"),   # Logs dans core
         ]
         
         logs_dir = None

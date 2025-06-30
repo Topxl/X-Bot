@@ -195,4 +195,15 @@ Le bot Twitter automatisé est **EN PRODUCTION** avec :
 
 **🚀 DÉPLOYÉ ET ACTIF DEPUIS LE 28 DÉCEMBRE 2025**
 
-**Lien tweet de test** : https://twitter.com/MaxiMemeFeed/status/1938866596870754574 
+**Lien tweet de test** : https://twitter.com/MaxiMemeFeed/status/1938866596870754574
+
+## Corrections Post-Production
+
+### ✅ Fix Logs Duplication (30 Juin 2025)
+- **Problème identifié** : Logs dupliqués dans `/logs/` et `core/logs/`
+- **Cause** : Dashboard cherchait dans `core/logs/` (ancien emplacement obsolète)
+- **Solution appliquée** :
+  - ✅ Supprimé référence `../core/logs` dans dashboard routes
+  - ✅ Supprimé fichier obsolète `core/logs/bot_2025-06-30.log`
+  - ✅ Supprimé dossier `core/logs/` vide
+- **Résultat** : Un seul emplacement de logs unifié dans `/logs/` 
