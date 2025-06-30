@@ -1,0 +1,131 @@
+{
+  "x_api": {
+    "plan": "basic",
+    "quotas": {
+      "basic": {
+        "posts_per_month": 3000,
+        "reads_per_month": 43200,
+        "posts_per_day": 100,
+        "reads_per_day": 1440
+      },
+      "pro": {
+        "posts_per_month": 50000,
+        "reads_per_month": 2000000,
+        "posts_per_day": 1667,
+        "reads_per_day": 66667
+      },
+      "enterprise": {
+        "posts_per_month": -1,
+        "reads_per_month": -1,
+        "posts_per_day": -1,
+        "reads_per_day": -1
+      }
+    }
+  },
+  "posting": {
+    "enabled": true,
+    "frequency_per_day": 3,
+    "time_range": {
+      "start": "09:00",
+      "end": "21:00"
+    },
+    "timezone": "Asia/Bangkok"
+  },
+  "engagement": {
+    "auto_like_replies": true,
+    "likes_per_day": 200,
+    "max_likes_per_hour": 30,
+    "auto_reply_enabled": false,
+    "reply_check_interval_minutes": 60,
+    "max_replies_per_day": 20,
+    "max_replies_per_conversation": 1,
+    "reply_check_24h": true
+  },
+  "content_generation": {
+    "provider": "auto",
+    "model": "gpt-4o-mini",
+    "enable_images": true,
+    "image_model": "dall-e-3",
+    "max_tokens": 150,
+    "temperature": 0.7,
+    "viral_keywords": [
+      "crypto",
+      "solana",
+      "blockchain",
+      "DeFi",
+      "NFT",
+      "web3",
+      "altcoin",
+      "trading",
+      "hodl",
+      "pump",
+      "moon",
+      "bullish",
+      "bearish"
+    ],
+    "tweet_types": {
+      "enabled": true,
+      "rotation_pattern": ["powerful_statement", "educational_post", "personal_story"],
+      "types": {
+        "powerful_statement": {
+          "name": "Déclaration Percutante",
+          "description": "Une courte déclaration qui provoque une réaction",
+          "max_tokens": 100,
+          "temperature": 0.8,
+          "weight": 1,
+          "enabled": true
+        },
+        "educational_post": {
+          "name": "Post Éducatif",
+          "description": "Un message détaillé et instructif",
+          "max_tokens": 280,
+          "temperature": 0.7,
+          "weight": 1,
+          "enabled": true
+        },
+        "personal_story": {
+          "name": "Histoire Personnelle",
+          "description": "Une histoire personnelle et relatante",
+          "max_tokens": 250,
+          "temperature": 0.9,
+          "weight": 1,
+          "enabled": true
+        }
+      },
+      "fallback_type": "powerful_statement"
+    },
+    "auto_reply": {
+      "provider": "auto",
+      "model": "gpt-4o-mini",
+      "max_tokens": 60,
+      "temperature": 0.9,
+      "alternative_models": ["gpt-4o-mini", "gpt-4o", "gpt-4", "gpt-3.5-turbo"],
+      "force_llm": true
+    },
+    "tweet_generation": {
+      "provider": "auto",
+      "model": "gpt-4o-mini",
+      "max_tokens": 150,
+      "temperature": 0.7
+    }
+  },
+  "monitoring": {
+    "collect_stats": true,
+    "stats_frequency_hours": 1,
+    "daily_report": true,
+    "report_time": "08:00",
+    "alert_on_quota_warning": true,
+    "quota_warning_threshold": 0.7
+  },
+  "storage": {
+    "supabase_config_sync": false,
+    "keep_tweet_history_days": 90,
+    "cleanup_frequency_days": 7
+  },
+  "logging": {
+    "level": "INFO",
+    "format": "readable",
+    "file_rotation": "1 day",
+    "max_file_size": "10 MB"
+  }
+} 

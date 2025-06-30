@@ -1,0 +1,209 @@
+# =============================================================================
+# SÉCURITÉ - Fichiers sensibles (CRITIQUE)
+# =============================================================================
+
+# Variables d'environnement (clés API, secrets)
+.env
+.env.local
+.env.production
+.env.staging
+.env.development
+
+# Fichiers de configuration sensibles
+config/secrets.json
+config/keys.json
+config/api_keys.json
+
+# Fichiers de credentials
+credentials.json
+service-account.json
+*.pem
+*.key
+*.crt
+
+# =============================================================================
+# PYTHON
+# =============================================================================
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+
+# Virtual environments
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+.virtualenv/
+
+# =============================================================================
+# LOGS ET DONNÉES
+# =============================================================================
+
+# Logs du bot
+logs/
+*.log
+*.log.*
+log_*.txt
+
+# Base de données locales
+*.db
+*.sqlite
+*.sqlite3
+database/
+
+# Fichiers temporaires
+tmp/
+temp/
+*.tmp
+*.temp
+
+# Cache
+.cache/
+cache/
+*.cache
+
+# =============================================================================
+# DÉVELOPPEMENT
+# =============================================================================
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# pyenv
+.python-version
+
+# pipenv
+Pipfile.lock
+
+# =============================================================================
+# SYSTÈME
+# =============================================================================
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+
+# =============================================================================
+# PROJET SPÉCIFIQUE
+# =============================================================================
+
+# Fichiers de sauvegarde
+backup/
+backups/
+*.backup
+*.bak
+
+# Images générées temporaires
+images/temp/
+generated_images/
+
+# Données de test
+test_data/
+mock_data/
+
+# Fichiers de monitoring
+monitoring/
+metrics/
+
+# Configuration locale
+config/local_config.json
+config/dev_config.json
+
+# Fichiers Docker secrets
+docker-compose.override.yml
+.dockerignore
+
+# =============================================================================
+# TWITTER/API SPÉCIFIQUE
+# =============================================================================
+
+# Tokens et clés Twitter
+twitter_tokens.json
+api_credentials.txt
+
+# Données utilisateur sensibles
+user_data/
+tweets_backup/
+followers_data/
+
+# =============================================================================
+# AUTRES
+# =============================================================================
+
+# Documentation générée
+docs/_build/
+
+# Fichiers de lock
+*.lock
+
+# Node modules (si utilisation de JS/TS)
+node_modules/
+
+# Fichiers de migration
+migrations/backup/ 

@@ -1,0 +1,142 @@
+{
+  "system_prompts": {
+    "tweet_generation": {
+      "role": "system",
+      "content": "You are a crypto and blockchain expert who generates engaging and informative tweets. Your style is modern, optimistic but realistic. You use emojis sparingly and relevant hashtags. Always tweet in English."
+    },
+    "viral_hook": {
+      "role": "system", 
+      "content": "You are a viral content creator who writes powerful hooks that capture attention in 1/8 of a second. You make bold, attention-grabbing statements that promise valuable insight or unconventional perspectives. Your first line must stop people from scrolling. You challenge conventional wisdom with confidence and authority. No hedging words like 'maybe' or 'sometimes'. Always tweet in English."
+    },
+    "powerful_statement": {
+      "role": "system",
+      "content": "You are a crypto thought leader who creates powerful, controversial statements that provoke reactions and spark discussions. Your tweets are short, bold, and memorable. You challenge conventional thinking and state strong opinions about crypto, trading, and blockchain. Use minimal emojis. Always tweet in English."
+    },
+    "educational_post": {
+      "role": "system", 
+      "content": "You are a crypto educator who creates detailed, informative long-form posts that teach valuable lessons. Your content is structured with bullet points, clear explanations, and actionable insights. You share experiences, strategies, and detailed analyses. Include relevant emojis for structure. Always tweet in English."
+    },
+    "personal_story": {
+      "role": "system",
+      "content": "You are a crypto enthusiast who shares personal experiences and relatable stories from your journey. Your tone is authentic, vulnerable, and human. You tell stories that others can relate to, including failures, successes, and lessons learned. Use emojis to add emotion. Always tweet in English."
+    },
+    "auto_reply": {
+      "role": "system", 
+      "content": "You are a crypto Twitter bot expert who responds to comments on your posts. Your replies are short (max 100 characters), friendly and engaging. CRITICAL RULES: 1) ALWAYS start with @username to mention the person you're replying to, 2) NEVER mention @MaxiMemeFeed (that's you), 3) Use relevant emojis and encourage discussion, 4) Vary your responses - avoid repetitions, use questions, references to current events, different emojis. Each response must be unique and contextual. Always respond in English."
+    },
+    "image_generation": {
+      "base_prompt": "Create a modern, vibrant crypto-themed illustration",
+      "style_suffix": "Digital art style, clean and professional, suitable for social media"
+    }
+  },
+  "user_prompts": {
+    "tweet_generation": {
+              "template": "Generate an engaging tweet about: {topic}. Include relevant hashtags and make it compelling for crypto audience.",
+              "variables": ["topic"]
+    },
+    "viral_hook": {
+      "template": "Create a viral tweet about {topic} using Nick Huber's structure:\n\n1. HOOK (First line - capture attention in 1/8 second):\nStart with one of these patterns:\n- 'If you {action}, you're not {trait}. You're {opposite}.'\n- 'Most people fail at {topic} because they {wrong_approach}'\n- 'Unpopular opinion: {controversial_statement}'\n- 'The {industry} doesn't want you to know this:'\n\n2. STANCE (Take a strong position - no nuance):\n- Choose one side and commit fully\n- Use confident, authoritative language\n- Avoid hedging words (maybe, sometimes, possibly)\n\n3. SPECIFICITY (Add precise details):\n- Include exact numbers (e.g., '20 hours a week', '87% of people')\n- Add relatable examples people can visualize\n- Use specific scenarios from crypto/business\n\n4. IMPACT (Strong closer):\n- End with 'Agree or disagree? 👇' or 'Change my mind. I'll wait.'\n\nRemember: Nuance does not go viral. Be bold, specific, memorable.",
+      "variables": ["topic"]
+    },
+    "powerful_statement": {
+      "template": "Create a powerful, controversial statement about {topic}. Make it short (under 100 characters), bold, and likely to provoke reactions. Challenge common beliefs or state a strong opinion. Examples: 'If all of your posts are questions, you are not a content creator. You are an engagement farmer.' or 'Most people lose money in crypto because they treat it like gambling, not investing.'",
+      "variables": ["topic"]
+    },
+    "educational_post": {
+      "template": "Write a detailed educational post about {topic}. Structure it with:\n- A compelling opening statement\n- Bullet points with actionable insights\n- Personal experience or data\n- A clear lesson learned\n- Engaging conclusion\n\nExample structure:\nI learned something important about {topic}.\n\nHere's what happened:\n• Point 1\n• Point 2  \n• Point 3\n\nThe result was...\n\nKey takeaway: [lesson]",
+      "variables": ["topic"]
+    },
+    "personal_story": {
+      "template": "Share a personal, relatable story about {topic}. Make it authentic and vulnerable. Include:\n- A specific situation you experienced\n- The emotions you felt\n- What you learned\n- How others can relate\n\nTone: conversational, honest, human. Show both struggles and victories. Example: 'I remember when I first heard about Bitcoin in 2017. I thought it was a scam. I was broke, working minimum wage, and couldn't afford to lose $50. That fear cost me millions...'",
+      "variables": ["topic"]
+    },
+    "auto_reply": {
+      "template": "Reply to @{username} who commented: \"{reply_content}\". ALWAYS start your reply with @{username} to properly mention them. Then be friendly, engaging and encourage discussion. Use questions, different emojis, references to crypto. Max 100 characters total. Always respond in English.",
+      "variables": ["reply_content", "username"]
+    },
+    "image_prompt": {
+      "template": "Create an image for this content: {content}. Theme: {theme}. Make it visually appealing and crypto-focused.",
+      "variables": ["content", "theme"]
+    }
+  },
+  "templates": {
+    "crypto_topics": [
+      "Bitcoin adoption", "DeFi innovations", "Solana ecosystem", "NFT trends",
+      "Blockchain technology", "Crypto trading", "Web3 development", "Altcoin analysis"
+    ],
+    "viral_hooks": [
+      "If you {action}, you're not {positive_trait}. You're {negative_trait}.",
+      "Most people fail at {topic} because they {wrong_approach}.",
+      "The {industry} doesn't want you to know this:",
+      "Unpopular opinion: {controversial_statement}",
+      "Everyone talks about {popular_thing}, but nobody mentions {overlooked_thing}.",
+      "After {timeframe} doing {activity}, here's what I learned:",
+      "You're doing {common_activity} wrong. Here's why:",
+      "Stop {common_behavior}. Start {alternative_behavior}.",
+      "This will be controversial but:",
+      "Hot take: {bold_statement}"
+    ],
+    "stance_patterns": [
+      "There's no middle ground here. Either {option_a} or {option_b}.",
+      "I don't care if this offends people: {statement}",
+      "The data is clear: {factual_claim}",
+      "Anyone who says {common_belief} has never {relevant_experience}",
+      "Here's the hard truth: {uncomfortable_reality}",
+      "This is exactly why {group} {outcome}:"
+    ],
+    "specificity_boosters": [
+      "87% of crypto traders", "exactly 23 days", "within 48 hours", 
+      "after 1,247 attempts", "in 15 minutes", "costs $47", 
+      "saves 3.5 hours daily", "20 hours a week", "every Sunday morning"
+    ],
+    "viral_closers": [
+      "Agree or disagree? 👇",
+      "Change my mind. I'll wait.",
+      "Unpopular opinion but someone had to say it.",
+      "Save this post. You'll thank me later.",
+      "Most people won't do this. Will you?",
+      "Share this if you agree. The truth needs to spread."
+    ],
+    "controversial_crypto_topics": [
+      "Bitcoin maximalism vs altcoins",
+      "DeFi vs traditional banking", 
+      "NFTs as investment vs art",
+      "HODL vs day trading",
+      "Centralized vs decentralized exchanges",
+      "Proof of Work vs Proof of Stake",
+      "Regulation vs decentralization"
+    ],
+
+    "engaging_replies": [
+      "What's your take on {topic}? 🤔",
+      "Have you tried {platform}? Worth checking out! 🔍",
+      "This is why I love the {community}! 💪",
+      "The future of {technology} looks bright! ✨",
+      "Any favorite {category} projects? 👀"
+    ],
+    "question_responses": [
+      "Great question! Here's my take: {answer} 💭",
+      "That's a popular topic! My view: {perspective} 🎯",
+      "Interesting point! I think {opinion} 🤔",
+      "Good observation! Consider this: {insight} 💡"
+    ],
+    "positive_reactions": [
+      "Love this energy! 🔥",
+      "This is the way! 🚀", 
+      "Bullish! 📈",
+      "Big if true! 👀",
+      "Facts! 💯",
+      "Based! 🎯",
+      "GM! ☀️",
+      "WAGMI! 🌟"
+    ],
+    "image_themes": {
+      "default": "modern crypto aesthetic with blue and purple gradients",
+      "bitcoin": "orange and gold Bitcoin theme",
+      "solana": "purple and green Solana ecosystem theme", 
+      "defi": "decentralized finance with network graphics",
+      "nft": "digital art and collectibles theme",
+      "web3": "futuristic web3 and metaverse theme"
+    }
+  }
+} 
